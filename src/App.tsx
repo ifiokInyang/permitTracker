@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, BrowserRouter, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import Permit from "./pages/Permit/Permit";
 // import { Toaster } from "react-hot-toast";
 
 function AppRoutes() {
@@ -15,6 +16,7 @@ function AppRoutes() {
 			<Routes>
 				{/* <Toaster /> */}
 				<Route path="/" element={<Home />} />
+				<Route path="/dashboard" element={<Permit />} />
 			</Routes>
 		</React.Fragment>
 	);

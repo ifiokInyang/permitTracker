@@ -1,14 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-// module.exports = {
-//   content: [],
-//   theme: {
-//     extend: {},
-//   },
-//   plugins: [],
-// }
 
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}', // Existing content patterns
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.js'
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -23,9 +19,9 @@ module.exports = {
         sm: '375px',
         md: '768px',
         lg: '976px',
-        "8xl": '1440px'
+        '8xl': '1440px'
       }
     }
   },
-  plugins: []
+  plugins: [require('flowbite/plugin')]
 };
