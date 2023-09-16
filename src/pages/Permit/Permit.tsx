@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
+import emailjs from "@emailjs/browser";
 
 export interface IDate {
 	lastRenewed: string | Date;
@@ -8,7 +9,7 @@ export interface IDate {
 const Permit = () => {
 	const [title, setTitle] = useState<string>("");
 	const [permitNumber, setPermitNumber] = useState("");
-	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	const [value, setValue] = useState<DateValueType>({
 		startDate: null,
@@ -20,18 +21,23 @@ const Permit = () => {
 	});
 
 	const handleValueChange = (newValue: DateValueType) => {
-		console.log("newValue:", newValue);
 		setValue(newValue);
 	};
 
 	const handleChange = (value: DateValueType): void => {
-		console.log("value is :", value);
 		setExpiryDate(value);
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setIsSubmitted(true)
+		setIsSubmitting(true);
+		const emailParams = {
+			to_name: "Ifiok",
+			to_email: "gradscholar2021@gmail.com",
+			title,
+			permit_number: permitNumber,
+			due_date: expiryDate?.startDate as Date | undefined,
+		};
 		console.log(
 			"details is :",
 			{
@@ -41,6 +47,34 @@ const Permit = () => {
 			{ lastRenewed: value?.startDate },
 			{ expiry: expiryDate?.startDate }
 		);
+		setTimeout(() => {
+      setIsSubmitting(false);
+    }, 3000);
+		setInterval(async () => {
+			await sendMail(emailParams);
+		}, 1000 * 60 * 2);
+	};
+
+	const sendMail = async (emailParams: {
+		to_name: string;
+		to_email: string;
+		title: string;
+		permit_number: string;
+		due_date: Date | undefined;
+	}) => {
+		try {
+			
+			const response = await emailjs.send(
+				"service_sxuphfl",
+				"template_hgoq05l",
+				emailParams,
+				"ZrqG-jUBYX3HUbgmS"
+			);
+			console.log("SUCCESS!", response.status, response.text);
+		} catch (error: any) {
+			console.log("FAILED...", error);
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -128,7 +162,7 @@ const Permit = () => {
 						type="submit"
 						className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					>
-						{isSubmitted ? "Processing..." : "Submit"}
+						{isSubmitting ? "Processing..." : "Submit"}
 					</button>
 				</form>
 			</div>
