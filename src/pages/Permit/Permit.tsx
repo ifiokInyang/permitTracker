@@ -31,6 +31,7 @@ const Permit = () => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setIsSubmitted(true)
 		console.log(
 			"details is :",
 			{
